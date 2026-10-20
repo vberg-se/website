@@ -50,7 +50,7 @@
      inkscape:groupmode="layer"
      id="g21"
      inkscape:label="IconDark"
-     style="display:none"
+     style="display:inline"
      sodipodi:insensitive="true"
      transform="translate(-86.153346,718.17493)"><g
        id="g4"
@@ -75,7 +75,7 @@
      inkscape:groupmode="layer"
      id="g19"
      inkscape:label="IconLight"
-     style="display:none"
+     style="display:inline"
      sodipodi:insensitive="true"
      transform="translate(-86.153346,718.17493)"><g
        id="g3"
@@ -100,7 +100,7 @@
      inkscape:groupmode="layer"
      id="layer1"
      inkscape:label="IconMain"
-     style="display:inline"
+     style="display:none"
      sodipodi:insensitive="true"
      transform="translate(-86.153346,718.17493)"><g
        id="g1"
@@ -125,7 +125,7 @@
      inkscape:groupmode="layer"
      id="g16"
      inkscape:label="LogoDark"
-     style="display:none"
+     style="display:inline"
      transform="translate(-86.158939,718.17171)"
      sodipodi:insensitive="true"><g
        id="g24"
@@ -167,7 +167,7 @@
      inkscape:groupmode="layer"
      id="g13"
      inkscape:label="LogoLight"
-     style="display:none"
+     style="display:inline"
      transform="translate(-86.158939,718.17171)"
      sodipodi:insensitive="true"><g
        id="g23"
@@ -210,7 +210,7 @@
      inkscape:groupmode="layer"
      id="g6"
      inkscape:label="LogoMain"
-     style="display:inline"
+     style="display:none"
      transform="translate(-86.158939,718.17171)"
      sodipodi:insensitive="true"><g
        id="g22"

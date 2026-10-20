@@ -1,34 +1,67 @@
 # -------------------------------
 # CONFIGURATION
 # -------------------------------
+$inkscape = "C:\Program Files\Inkscape\bin\inkscape.com"
+$file     = (Resolve-Path "Logo.svg").Path
 
-# Path to your SVG
-$file = "Logo.svg"
+# -------------------------------
+# HELPER: export one layer, forcing it visible
+# -------------------------------
+function Export-Layer {
+    param(
+        [string]   $Id,
+        [string]   $Out,
+        [string[]] $ExtraArgs = @()
+    )
 
-# Output folder (optional)
-#$out = "export"
-#New-Item -ItemType Directory -Force -Path $out | Out-Null
+    $doc = New-Object System.Xml.XmlDocument
+    $doc.PreserveWhitespace = $true
+    $doc.Load($file)
+
+    $node = $doc.SelectSingleNode("//*[@id='$Id']")
+    if (-not $node) { throw "Element with id '$Id' not found in $file" }
+
+    # Un-hide the target and all of its ancestors (parent layers)
+    while ($node -and $node.NodeType -eq [System.Xml.XmlNodeType]::Element) {
+        $style = $node.GetAttribute("style")
+        if ($style) {
+            $style = ($style -replace 'display\s*:\s*none\s*;?', '').Trim().TrimEnd(';')
+            if ($style) { $node.SetAttribute("style", $style) }
+            else        { $node.RemoveAttribute("style") }
+        }
+        if ($node.GetAttribute("display") -eq "none") { $node.RemoveAttribute("display") }
+        $node = $node.ParentNode
+    }
+
+    # Save temp copy next to the original so relative links (images, etc.) still resolve
+    $tmp = Join-Path (Split-Path $file) "_export_tmp.svg"
+    $doc.Save($tmp)
+
+    try {
+        & $inkscape $tmp --export-id=$Id --export-id-only --export-filename=$Out @ExtraArgs
+    }
+    finally {
+        Remove-Item $tmp -ErrorAction SilentlyContinue
+    }
+}
 
 # -------------------------------
 # EXPORT PAGE 1 LAYERS
 # -------------------------------
+$lightLayer = "g13"
+$darkLayer  = "g16"
 
-# Page 1 layer IDs (replace with your actual IDs)
-$lightLayer  = "g13"
-$darkLayer = "g16"
-
-& "C:\Program Files\Inkscape\bin\inkscape.com" $file --export-type=svg --export-page=1 --export-id=$lightLayer  --export-id-only --export-filename="LogoLight.svg"
-& "C:\Program Files\Inkscape\bin\inkscape.com" $file --export-type=svg --export-page=1 --export-id=$darkLayer --export-id-only --export-filename="LogoDark.svg"
+Export-Layer $lightLayer "LogoLight.svg" @("--export-type=svg")
+Export-Layer $darkLayer  "LogoDark.svg"  @("--export-type=svg")
 
 # -------------------------------
 # EXPORT PAGE 2 ICONS
 # -------------------------------
+$lightLayer = "g19"
+$darkLayer  = "g21"
 
-# Page 2 icon layer IDs
-$lightLayer  = "g19"
-$darkLayer = "g21"
-
-& "C:\Program Files\Inkscape\bin\inkscape.com" $file --export-type=png --export-page=2 --export-id=$lightLayer  --export-id-only --export-width=32 --export-height=32 --export-filename="IconLight-32.png"
-& "C:\Program Files\Inkscape\bin\inkscape.com" $file --export-type=png --export-page=2 --export-id=$darkLayer --export-id-only --export-width=32 --export-height=32 --export-filename="IconDark-32.png"
-& "C:\Program Files\Inkscape\bin\inkscape.com" $file --export-type=png --export-page=2 --export-id=$lightLayer  --export-id-only --export-width=500 --export-height=500 --export-filename="IconLight-500.png"
-& "C:\Program Files\Inkscape\bin\inkscape.com" $file --export-type=png --export-page=2 --export-id=$darkLayer --export-id-only --export-width=500 --export-height=500 --export-filename="IconDark-500.png"
+foreach ($size in 32, 512) {
+    $sz = @("--export-type=png", "--export-page=2", "--export-area-page")
+    Export-Layer $lightLayer "IconLight-$size.png" $sz
+    Export-Layer $darkLayer  "IconDark-$size.png"  $sz
+}
