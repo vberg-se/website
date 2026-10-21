@@ -1,0 +1,30 @@
+{
+  "inkscape": "C:\\Program Files\\Inkscape\\bin\\inkscape.com",
+  "source": "Logo.svg",
+  "outputDir": ".",
+
+  "presets": {
+    "svg": [
+      "--export-type=svg"
+    ],
+    "logo-png": [
+      "--export-type=png"
+    ],
+    "icon-png": [
+      "--export-type=png",
+      "--export-page=2",
+      "--export-area-page"
+    ]
+  },
+
+  "exports": [
+    { "description": "Logo ljus", "elementId": "g13", "out": "LogoLight.svg", "preset": "svg" },
+    { "description": "Logo mörk", "elementId": "g16", "out": "LogoDark.svg",  "preset": "svg" },
+
+    { "description": "Logo ljus", "elementId": "g13", "out": "LogoLight-{size}.png", "preset": "logo-png", "sizes": [1024] },
+    { "description": "Logo mörk", "elementId": "g16", "out": "LogoDark-{size}.png","preset": "logo-png", "sizes": [1024] },
+
+    { "description": "Ikon ljus", "elementId": "g19", "out": "IconLight-{size}.png", "preset": "icon-png", "sizes": [32, 512] },
+    { "description": "Ikon mörk", "elementId": "g21", "out": "IconDark-{size}.png",  "preset": "icon-png", "sizes": [32, 512] }
+  ]
+}
